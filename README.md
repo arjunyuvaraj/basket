@@ -90,16 +90,4 @@ Basket is a minimalist grocery list app built with Flutter and Firebase. It lets
     </tr>
   </table>
 
-  ### 📋 All Items
-  <table>
-    <tr>
-      <td><strong>Light</strong></td>
-      <td><strong>Dark</strong></td>
-    </tr>
-    <tr>
-      <td><img src="screenshots/all_light.png" width="150"/></td>
-      <td><img src="screenshots/all_dark.png" width="150"/></td>
-    </tr>
-  </table>
-
 </details>
