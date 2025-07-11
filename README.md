@@ -1,17 +1,18 @@
-# basket
+# Basket
+Basket is a minimalist grocery list app built with Flutter and Firebase. It lets you organize shopping items by store, check them off as you go, and keeps everything synced across devices.
 
-A new Flutter project.
+## ✨ Features
 
-## Getting Started
+- Organize items by store
+- Add and remove items with ease
+- Check off completed items
+- Automatically deletes empty store lists
+- Sign up and sign in with Firebase Auth
+- Sync data with Firestore in real-time
+- Supports light and dark mode
 
-This project is a starting point for a Flutter application.
+## Screenshots
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-# basket
+![image](screenshots/login_dark)
+![image](screenshots/register_dark)
+![image](screenshots/account_dark)
