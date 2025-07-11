@@ -13,6 +13,6 @@ Basket is a minimalist grocery list app built with Flutter and Firebase. It lets
 
 ## Screenshots
 
-![image](screenshots/login_dark)
-![image](screenshots/register_dark)
-![image](screenshots/account_dark)
+![image](screenshots/login_dark.png)
+![image](screenshots/register_dark.png)
+![image](screenshots/account_dark.png)
