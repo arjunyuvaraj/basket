@@ -1,17 +1,93 @@
-# basket
+# Basket
+Basket is a minimalist grocery list app built with Flutter and Firebase. It lets you organize shopping items by store, check them off as you go, and keeps everything synced across devices.
 
-A new Flutter project.
+## ✨ Features
 
-## Getting Started
+- 🏪 Organize items by store
+- ➕ Add and remove items with ease
+- ✅ Check off completed items
+- 🗑️ Automatically deletes empty store lists
+- 🔐 Sign up and sign in with Firebase Auth
+- 🔥 Sync data with Firestore in real-time
+- 🌗 Supports light and dark mode
 
-This project is a starting point for a Flutter application.
+## 📸 Screenshots
 
-A few resources to get you started if this is your first Flutter project:
+<details>
+  <summary>Click to expand screenshots (light + dark)</summary>
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+  <br/>
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-# basket
+  ### 🏠 Home
+  <table>
+    <tr>
+      <td><strong>Light</strong></td>
+      <td><strong>Dark</strong></td>
+    </tr>
+    <tr>
+      <td><img src="screenshots/home_light.png" width="150"/></td>
+      <td><img src="screenshots/home_dark.png" width="150"/></td>
+    </tr>
+  </table>
+
+  ### 🔐 Login
+  <table>
+    <tr>
+      <td><strong>Light</strong></td>
+      <td><strong>Dark</strong></td>
+    </tr>
+    <tr>
+      <td><img src="screenshots/login_light.png" width="150"/></td>
+      <td><img src="screenshots/login_dark.png" width="150"/></td>
+    </tr>
+  </table>
+
+  ### 📝 Register
+  <table>
+    <tr>
+      <td><strong>Light</strong></td>
+      <td><strong>Dark</strong></td>
+    </tr>
+    <tr>
+      <td><img src="screenshots/register_light.png" width="150"/></td>
+      <td><img src="screenshots/register_dark.png" width="150"/></td>
+    </tr>
+  </table>
+
+  ### 👤 Account
+  <table>
+    <tr>
+      <td><strong>Light</strong></td>
+      <td><strong>Dark</strong></td>
+    </tr>
+    <tr>
+      <td><img src="screenshots/account_light.png" width="150"/></td>
+      <td><img src="screenshots/account_dark.png" width="150"/></td>
+    </tr>
+  </table>
+
+  ### ➕ New
+  <table>
+    <tr>
+      <td><strong>Light</strong></td>
+      <td><strong>Dark</strong></td>
+    </tr>
+    <tr>
+      <td><img src="screenshots/new_light.png" width="150"/></td>
+      <td><img src="screenshots/new_dark.png" width="150"/></td>
+    </tr>
+  </table>
+
+  ### 🛒 List
+  <table>
+    <tr>
+      <td><strong>Light</strong></td>
+      <td><strong>Dark</strong></td>
+    </tr>
+    <tr>
+      <td><img src="screenshots/list_light.png" width="150"/></td>
+      <td><img src="screenshots/list_dark.png" width="150"/></td>
+    </tr>
+  </table>
+
+</details>
