@@ -15,7 +15,7 @@ void main() async {
   try {
     await themeModel.loadUserTheme();
   } catch (e) {
-    print('Failed to load user theme: $e');
+    themeModel.setCurrentTheme("light");
   }
 
   runApp(

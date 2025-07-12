@@ -29,10 +29,17 @@ class _NewItemState extends State<NewItem> {
         });
       }
     });
+    quantityFocusNode.addListener(() {
+      if (!nameFocusNode.hasFocus) {
+        setState(() {
+          _showSuggestions = false;
+        });
+      }
+    });
 
     nameController.addListener(() {
       if (_debounce?.isActive ?? false) _debounce?.cancel();
-      _debounce = Timer(const Duration(milliseconds: 300), _searchSuggestions);
+      _debounce = Timer(const Duration(milliseconds: 00), _searchSuggestions);
     });
   }
 
@@ -46,6 +53,8 @@ class _NewItemState extends State<NewItem> {
   final TextEditingController quantityController = TextEditingController();
   final TextEditingController storesController = TextEditingController();
 
+  final FocusNode quantityFocusNode = FocusNode();
+
   List<String> getStores() {
     return storesController.text
         .split(',')
@@ -58,7 +67,7 @@ class _NewItemState extends State<NewItem> {
 
   Future<void> _searchSuggestions() async {
     final nameInput = nameController.text.trim().toLowerCase();
-    if (nameInput.isEmpty) {
+    if (nameInput.isEmpty || quantityFocusNode.hasFocus) {
       setState(() {
         _suggestions = [];
         _showSuggestions = false;
@@ -198,6 +207,7 @@ class _NewItemState extends State<NewItem> {
                                 shrinkWrap: true,
                                 itemCount: _suggestions.length,
                                 itemBuilder: (context, index) {
+                                  print(_showSuggestions);
                                   final suggestion = _suggestions[index];
                                   return ListTile(
                                     dense: true,
@@ -222,6 +232,7 @@ class _NewItemState extends State<NewItem> {
                                         storesController.text =
                                             suggestion['store'];
                                         _suggestions = [];
+                                        quantityFocusNode.requestFocus();
                                         _showSuggestions = false;
                                       });
                                     },
@@ -243,6 +254,7 @@ class _NewItemState extends State<NewItem> {
                         keyboardType: TextInputType.numberWithOptions(
                           decimal: true,
                         ),
+                        focusNode: quantityFocusNode,
                         decoration: const InputDecoration(
                           labelText: 'Quantity',
                         ),

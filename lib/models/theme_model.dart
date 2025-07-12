@@ -10,6 +10,10 @@ class ThemeModel extends ChangeNotifier {
 
   String get currentTheme => _currentTheme;
 
+  void setCurrentTheme(String theme) {
+    _currentTheme = theme;
+  }
+
   Future<void> loadUserTheme() async {
     if (currentUser == null) return;
 

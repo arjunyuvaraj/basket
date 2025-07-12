@@ -36,9 +36,8 @@ class _LoginPageState extends State<LoginPage> {
       );
 
       if (!mounted) return;
-      Navigator.pop(ctx); // close loading spinner
+      Navigator.pop(ctx);
 
-      // ✅ Navigate to NavigationPage after successful login
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => NavigationPage()),
