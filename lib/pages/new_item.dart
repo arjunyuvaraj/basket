@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:basket/components/app_button_primary.dart';
 import 'package:basket/components/app_text_field.dart';
 import 'package:basket/components/welcome_header.dart';
+import 'package:basket/helper/help_functions.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -42,6 +43,10 @@ class _NewItemState extends State<NewItem> {
       _debounce = Timer(const Duration(milliseconds: 00), _searchSuggestions);
     });
   }
+
+  bool isEssential = false;
+  final TextEditingController tagsController = TextEditingController();
+  List<String> tags = [];
 
   List<Map<String, dynamic>> _suggestions = [];
   bool _showSuggestions = false;
@@ -95,6 +100,8 @@ class _NewItemState extends State<NewItem> {
             'name': itemName,
             'quantity': item['quantity'],
             'store': store,
+            'essential': item['essential'] ?? false,
+            'tags': item['tags'] ?? [],
           });
         }
       }
@@ -114,6 +121,8 @@ class _NewItemState extends State<NewItem> {
     final newItem = {
       'name': nameController.text.trim(),
       'quantity': int.tryParse(quantityController.text.trim()) ?? 1,
+      'essential': isEssential,
+      'tags': tags,
       'completed': false,
     };
 
@@ -153,8 +162,10 @@ class _NewItemState extends State<NewItem> {
 
   @override
   Widget build(BuildContext context) {
+    // THEME
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
+
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -163,8 +174,8 @@ class _NewItemState extends State<NewItem> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               WelcomeHeader(
-                subtitle: "Time to..,",
-                title: "Add To Your Basket",
+                subtitle: "Got something to add?",
+                title: "Update Your Basket",
               ),
               const SizedBox(height: 24),
               Expanded(
@@ -223,6 +234,7 @@ class _NewItemState extends State<NewItem> {
                                         color: colorScheme.primary,
                                       ),
                                     ),
+
                                     onTap: () {
                                       setState(() {
                                         nameController.text =
@@ -231,6 +243,22 @@ class _NewItemState extends State<NewItem> {
                                             suggestion['quantity'].toString();
                                         storesController.text =
                                             suggestion['store'];
+
+                                        // Safely assign essential (default to false if missing)
+                                        isEssential =
+                                            suggestion['essential'] ?? false;
+
+                                        // Safely assign tags if it's a list
+                                        if (suggestion['tags'] is List) {
+                                          tags = List<String>.from(
+                                            suggestion['tags'],
+                                          );
+                                          tagsController.text = tags.join(', ');
+                                        } else {
+                                          tags = [];
+                                          tagsController.clear();
+                                        }
+
                                         _suggestions = [];
                                         quantityFocusNode.requestFocus();
                                         _showSuggestions = false;
@@ -265,6 +293,55 @@ class _NewItemState extends State<NewItem> {
                               : null;
                         },
                       ),
+                      const SizedBox(height: 12),
+                      TextFormField(
+                        controller: tagsController,
+                        decoration: const InputDecoration(
+                          labelText: 'Tags (comma-separated)',
+                        ),
+                        onChanged: (value) {
+                          final tagList = value
+                              .split(',')
+                              .map((tag) => tag.trim())
+                              .where((tag) => tag.isNotEmpty)
+                              .toSet()
+                              .toList();
+                          setState(() {
+                            tags = tagList;
+                          });
+                        },
+                      ),
+                      if (tags.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Wrap(
+                            spacing: 8,
+                            children: tags
+                                .map(
+                                  (tag) => Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 8,
+                                      vertical: 4,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: colorScheme.primary.withAlpha(50),
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: Text(
+                                      tag,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall
+                                          ?.copyWith(
+                                            color: colorScheme.primary,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                    ),
+                                  ),
+                                )
+                                .toList(),
+                          ),
+                        ),
 
                       const SizedBox(height: 12),
                       AppTextField(
@@ -272,10 +349,20 @@ class _NewItemState extends State<NewItem> {
                         controller: storesController,
                         obscureText: false,
                       ),
+                      CheckboxListTile(
+                        contentPadding: EdgeInsets.zero,
+                        title: Text("Mark as Essential"),
+                        value: isEssential,
+                        onChanged: (value) {
+                          setState(() {
+                            isEssential = value ?? false;
+                          });
+                        },
+                      ),
                       const SizedBox(height: 20),
                       AppButtonPrimary(
                         text: "Add Item",
-                        onPressed: () => handleSubmit(context),
+                        onPressed: () => rewriteUserItems(),
                       ),
                     ],
                   ),

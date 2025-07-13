@@ -14,6 +14,7 @@ void main() async {
   final themeModel = ThemeModel();
   try {
     await themeModel.loadUserTheme();
+    // rewriteUserItems();
   } catch (e) {
     themeModel.setCurrentTheme("light");
   }

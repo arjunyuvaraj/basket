@@ -6,25 +6,25 @@ final ThemeData lightTheme = mainTheme.copyWith(
   brightness: Brightness.light,
   scaffoldBackgroundColor: Colors.white,
   colorScheme: ColorScheme.light(
-    primary: Colors.black, // primary black for high contrast
+    primary: Color(0xFF202124),
     secondary: Colors.grey.shade800,
     tertiary: Colors.black45,
     surface: Colors.white,
     error: Colors.red,
     onError: Colors.white,
     onPrimary: Colors.white, // text on primary (black) if needed
-    onSecondary: Color(0x00202124),
+    onSecondary: Color(0xFF202124),
     onTertiary: Colors.white,
-    onSurface: Color(0x00202124),
+    onSurface: Color(0xFF202124),
   ),
   primaryTextTheme: GoogleFonts.poppinsTextTheme(
-    ThemeData.dark().textTheme.apply(bodyColor: Colors.black),
+    ThemeData.dark().textTheme.apply(bodyColor: Color(0xFF202124)),
   ),
   bottomNavigationBarTheme: BottomNavigationBarThemeData(
     backgroundColor: Colors.white, // white background
-    selectedIconTheme: const IconThemeData(color: Color(0x00202124), size: 28),
+    selectedIconTheme: const IconThemeData(color: Color(0xFF202124), size: 28),
     unselectedIconTheme: IconThemeData(color: Colors.grey.shade600, size: 28),
-    selectedLabelStyle: const TextStyle(color: Color(0x00202124)),
+    selectedLabelStyle: const TextStyle(color: Color(0xFF202124)),
     unselectedLabelStyle: TextStyle(color: Colors.grey.shade600),
   ),
   textTheme: TextTheme(

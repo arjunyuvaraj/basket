@@ -1,6 +1,7 @@
 import 'package:basket/pages/account_page.dart';
 import 'package:basket/pages/list_page.dart';
 import 'package:basket/pages/new_item.dart';
+import 'package:basket/pages/search_page.dart';
 import 'package:basket/pages/store_page.dart';
 import 'package:flutter/material.dart';
 
@@ -35,6 +36,7 @@ class _NavigationPageState extends State<NavigationPage> {
         },
       ),
       ListPage(initialStore: widget.initialStore),
+      SearchPage(),
       NewItem(),
       AccountPage(),
     ];
@@ -85,8 +87,9 @@ class _NavigationPageState extends State<NavigationPage> {
             children: [
               _buildNavIcon(Icons.store_rounded, 0),
               _buildNavIcon(Icons.list_rounded, 1),
-              _buildNavIcon(Icons.playlist_add_rounded, 2),
-              _buildNavIcon(Icons.account_circle_rounded, 3),
+              _buildNavIcon(Icons.search_rounded, 2),
+              _buildNavIcon(Icons.playlist_add_rounded, 3),
+              _buildNavIcon(Icons.account_circle_rounded, 4),
             ],
           ),
         ),

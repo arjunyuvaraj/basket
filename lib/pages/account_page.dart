@@ -1,3 +1,4 @@
+// IMPORTS
 import 'package:basket/authentication/login_or_register.dart';
 import 'package:basket/components/app_button_primary.dart';
 import 'package:basket/components/app_loading_circle.dart';
@@ -13,6 +14,7 @@ class AccountPage extends StatelessWidget {
 
   final User? currentUser = FirebaseAuth.instance.currentUser;
 
+  // HELPER METHODS
   void handleSignOut(BuildContext context) async {
     await FirebaseAuth.instance.signOut();
     Navigator.pushReplacement(
@@ -22,10 +24,12 @@ class AccountPage extends StatelessWidget {
   }
 
   void handleDeleteAccount(BuildContext context, String username) async {
+    // Variables
     final TextEditingController confirmController = TextEditingController();
     final navigator = Navigator.of(context);
     final messenger = ScaffoldMessenger.of(context);
 
+    // Confirmation Method: Type in username
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -104,6 +108,7 @@ class AccountPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // THEME
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final textTheme = theme.textTheme;
@@ -112,6 +117,7 @@ class AccountPage extends StatelessWidget {
       body: FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
         future: getUserDetails(),
         builder: (context, snapshot) {
+          // Get user data
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: AppLoadingCircle());
           }
@@ -134,6 +140,7 @@ class AccountPage extends StatelessWidget {
               children: [
                 // Profile Header
                 Center(
+                  // Header
                   child: Column(
                     children: [
                       CircleAvatar(
@@ -187,7 +194,7 @@ class AccountPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 12),
 
-                // Grouped list style container
+                // Email, Username, and Mode
                 Card(
                   elevation: 0,
                   shape: RoundedRectangleBorder(
@@ -220,9 +227,9 @@ class AccountPage extends StatelessWidget {
                         child: InfoRow(
                           bottomBorder: false,
                           label: "Theme",
-                          value: theme.brightness == Brightness.dark
-                              ? "Dark Mode"
-                              : "Light Mode",
+                          value: user['theme'] == "light"
+                              ? "Light Mode"
+                              : "Dark Mode",
                           icon: theme.brightness == Brightness.dark
                               ? Icons.dark_mode_outlined
                               : Icons.light_mode_outlined,

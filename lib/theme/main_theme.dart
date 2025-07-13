@@ -27,5 +27,6 @@ final ThemeData mainTheme = ThemeData(
     type: BottomNavigationBarType.fixed,
     elevation: 0,
   ),
+  dividerColor: Colors.transparent,
   useMaterial3: true,
 );

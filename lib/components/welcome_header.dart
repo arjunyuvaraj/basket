@@ -16,7 +16,13 @@ class WelcomeHeader extends StatelessWidget {
             color: ColorScheme.of(context).onSurface.withAlpha(100),
           ),
         ),
-        Text(title, style: TextTheme.of(context).headlineLarge?.copyWith()),
+        Text(
+          title,
+          style: TextTheme.of(context).headlineLarge?.copyWith(),
+          softWrap: true,
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
+        ),
       ],
     );
   }

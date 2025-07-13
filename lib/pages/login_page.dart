@@ -1,3 +1,4 @@
+// IMPORTS
 import 'package:basket/components/app_button_primary.dart';
 import 'package:basket/components/app_loading_circle.dart';
 import 'package:basket/components/app_text_field.dart';
@@ -15,11 +16,11 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  //controllers
+  // CONTROLLERS
   TextEditingController emailController = TextEditingController();
-
   TextEditingController passwordController = TextEditingController();
 
+  // HELPER METHODS
   void handleLogin() async {
     final ctx = context;
 
@@ -58,13 +59,14 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              // Icon Header
               Icon(
                 Icons.shopping_bag_outlined,
                 size: 80,
                 color: Theme.of(context).colorScheme.onSurface,
               ),
               const SizedBox(height: 16),
-              //subtitle
+              // Subtitle
               Text(
                 "WELCOME  TO ",
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
@@ -72,35 +74,35 @@ class _LoginPageState extends State<LoginPage> {
                   letterSpacing: 0.1,
                 ),
               ),
-              //app name
+              // Title
               Text(
                 "B A S K E T",
                 style: Theme.of(context).textTheme.headlineLarge,
               ),
               const SizedBox(height: 24),
-              //Email
+              // Email
               AppTextField(
                 hintText: "Email",
                 controller: emailController,
                 obscureText: false,
               ),
               const SizedBox(height: 16),
-              //Password
+              // Password
               AppTextField(
                 hintText: "Password",
                 controller: passwordController,
                 obscureText: true,
               ),
-              //Forgot password
+              // Forgot password
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   TextButton(onPressed: () {}, child: Text("Forgot Password?")),
                 ],
               ),
-              //login button
+              // Login button
               AppButtonPrimary(text: "LOGIN", onPressed: handleLogin),
-              // sign up
+              // If they don't have an account, registration button
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
