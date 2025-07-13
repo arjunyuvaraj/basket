@@ -17,6 +17,7 @@ class _StorePageState extends State<StorePage> {
   late Future<List<String>> _storeNamesFuture;
   Map<String, List<dynamic>> itemsMap = {};
   final User? currentUser = FirebaseAuth.instance.currentUser;
+  Future<String>? _firstNameFuture;
 
   Future<List<String>> _getUserStores() async {
     final doc = await FirebaseFirestore.instance
@@ -37,9 +38,20 @@ class _StorePageState extends State<StorePage> {
     return itemsMap.keys.toList();
   }
 
+  Future<String> _getFirstName() async {
+    final doc = await FirebaseFirestore.instance
+        .collection("Users")
+        .doc(currentUser?.email)
+        .get();
+
+    final data = doc.data();
+    return data?['first_name'] ?? "";
+  }
+
   @override
   void initState() {
     super.initState();
+    _firstNameFuture = _getFirstName();
     _storeNamesFuture = _getUserStores();
   }
 
@@ -52,7 +64,17 @@ class _StorePageState extends State<StorePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              WelcomeHeader(subtitle: "Welcome,", title: "Your Basket Awaits"),
+              FutureBuilder<String>(
+                future: _firstNameFuture,
+                builder: (context, snapshot) {
+                  final name = snapshot.data ?? '';
+                  return WelcomeHeader(
+                    subtitle: "Welcome $name,",
+                    title: "Your Basket Awaits",
+                  );
+                },
+              ),
+
               const SizedBox(height: 20),
               Expanded(
                 child: FutureBuilder<List<String>>(
