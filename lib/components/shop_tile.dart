@@ -17,48 +17,56 @@ class ShopTile extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-      decoration: BoxDecoration(
-        color: colorScheme.surface,
+    return Material(
+      color: colorScheme.surface,
+      elevation: 0,
+      borderRadius: BorderRadius.circular(20),
+      child: InkWell(
+        onTap: onTap,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: colorScheme.secondary.withAlpha(75)),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          /// Left: Item Info
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+        splashColor: colorScheme.primary.withAlpha(25), // ripple
+        highlightColor: Colors.transparent, // press background
+        hoverColor: colorScheme.primary.withAlpha(25),
+
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: colorScheme.secondary.withAlpha(75)),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                itemName,
-                style: textTheme.headlineSmall?.copyWith(
-                  color: colorScheme.primary,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 18,
-                ),
+              /// Middle: Item Info
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    itemName,
+                    style: textTheme.headlineSmall?.copyWith(
+                      color: colorScheme.primary,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 18,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    "Items: $itemQuantity",
+                    style: textTheme.bodyMedium?.copyWith(
+                      color: colorScheme.tertiary,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 4),
-              Text(
-                "Items: $itemQuantity",
-                style: textTheme.bodyMedium?.copyWith(
-                  color: colorScheme.tertiary,
-                  fontWeight: FontWeight.w500,
-                ),
+              Icon(
+                Icons.chevron_right_rounded,
+                size: 24,
+                color: colorScheme.primary,
               ),
             ],
           ),
-          GestureDetector(
-            onTap: onTap,
-            child: Icon(
-              Icons.chevron_right_rounded,
-              size: 24,
-              color: colorScheme.primary,
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

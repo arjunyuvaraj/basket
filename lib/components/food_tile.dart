@@ -52,6 +52,7 @@ class FoodTile extends StatelessWidget {
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w700,
                     color: color.primary,
+                    fontSize: 18,
                   ),
                 ),
                 const SizedBox(height: 6),

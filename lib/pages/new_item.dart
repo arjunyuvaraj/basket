@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:basket/components/app_button_primary.dart';
-import 'package:basket/components/app_text_field.dart';
 import 'package:basket/components/welcome_header.dart';
 import 'package:basket/helper/help_functions.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -19,30 +18,8 @@ class NewItem extends StatefulWidget {
 }
 
 class _NewItemState extends State<NewItem> {
-  @override
-  void initState() {
-    super.initState();
-
-    nameFocusNode.addListener(() {
-      if (!nameFocusNode.hasFocus) {
-        setState(() {
-          _showSuggestions = false;
-        });
-      }
-    });
-    quantityFocusNode.addListener(() {
-      if (!nameFocusNode.hasFocus) {
-        setState(() {
-          _showSuggestions = false;
-        });
-      }
-    });
-
-    nameController.addListener(() {
-      if (_debounce?.isActive ?? false) _debounce?.cancel();
-      _debounce = Timer(const Duration(milliseconds: 00), _searchSuggestions);
-    });
-  }
+  List<String> _storeSuggestions = [];
+  Timer? _storeDebounce;
 
   bool isEssential = false;
   final TextEditingController tagsController = TextEditingController();
@@ -50,9 +27,11 @@ class _NewItemState extends State<NewItem> {
 
   List<Map<String, dynamic>> _suggestions = [];
   bool _showSuggestions = false;
+  bool _showSuggestionsStore = false;
   final _formKey = GlobalKey<FormState>();
   final User? currentUser = FirebaseAuth.instance.currentUser;
   final FocusNode nameFocusNode = FocusNode();
+  final FocusNode storeFocusNode = FocusNode();
 
   final TextEditingController nameController = TextEditingController();
   final TextEditingController quantityController = TextEditingController();
@@ -69,6 +48,39 @@ class _NewItemState extends State<NewItem> {
   }
 
   Timer? _debounce;
+  Future<void> _searchStoreSuggestions() async {
+    final input = storesController.text.trim().toLowerCase();
+
+    if (input.isEmpty) {
+      setState(() {
+        _storeSuggestions = [];
+        _showSuggestionsStore = false;
+      });
+      return;
+    }
+
+    final doc = await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(currentUser?.email)
+        .get();
+
+    final data = doc.data();
+    if (data == null) return;
+
+    final Map<String, dynamic> itemsMap = Map<String, dynamic>.from(
+      data['items'] ?? {},
+    );
+    final allStores = itemsMap.keys.toList();
+
+    final filtered = allStores
+        .where((store) => store.toLowerCase().contains(input))
+        .toList();
+
+    setState(() {
+      _storeSuggestions = filtered;
+      _showSuggestionsStore = filtered.isNotEmpty;
+    });
+  }
 
   Future<void> _searchSuggestions() async {
     final nameInput = nameController.text.trim().toLowerCase();
@@ -156,8 +168,52 @@ class _NewItemState extends State<NewItem> {
   @override
   void dispose() {
     nameFocusNode.dispose();
+    storeFocusNode.dispose();
+    storesController.dispose();
+    _storeDebounce?.cancel();
+
     _debounce?.cancel();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    storesController.addListener(() {
+      if (_storeDebounce?.isActive ?? false) _storeDebounce?.cancel();
+      _storeDebounce = Timer(
+        const Duration(milliseconds: 150),
+        _searchStoreSuggestions,
+      );
+    });
+
+    nameFocusNode.addListener(() {
+      if (!nameFocusNode.hasFocus) {
+        setState(() {
+          _showSuggestions = false;
+        });
+      }
+    });
+    storeFocusNode.addListener(() {
+      if (!storeFocusNode.hasFocus) {
+        setState(() {
+          _showSuggestionsStore = false;
+        });
+      }
+    });
+
+    quantityFocusNode.addListener(() {
+      if (!nameFocusNode.hasFocus) {
+        setState(() {
+          _showSuggestions = false;
+        });
+      }
+    });
+
+    nameController.addListener(() {
+      if (_debounce?.isActive ?? false) _debounce?.cancel();
+      _debounce = Timer(const Duration(milliseconds: 00), _searchSuggestions);
+    });
   }
 
   @override
@@ -344,11 +400,59 @@ class _NewItemState extends State<NewItem> {
                         ),
 
                       const SizedBox(height: 12),
-                      AppTextField(
-                        hintText: "Store",
+                      TextFormField(
                         controller: storesController,
-                        obscureText: false,
+                        focusNode: storeFocusNode,
+                        decoration: InputDecoration(
+                          labelText: "Store",
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Theme.of(context).colorScheme.tertiary,
+                              width: 1.5,
+                            ),
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(8),
+                              topRight: Radius.circular(8),
+                            ),
+                          ),
+                        ),
                       ),
+                      if (_showSuggestionsStore)
+                        Container(
+                          decoration: BoxDecoration(
+                            color: colorScheme.surface,
+                            border: Border.all(color: colorScheme.tertiary),
+                            borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(8),
+                              bottomRight: Radius.circular(8),
+                            ),
+                          ),
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: _storeSuggestions.length,
+                            itemBuilder: (context, index) {
+                              final suggestion = _storeSuggestions[index];
+                              return ListTile(
+                                dense: true,
+                                title: Text(
+                                  suggestion,
+                                  style: textTheme.bodyMedium?.copyWith(
+                                    color: colorScheme.primary,
+                                  ),
+                                ),
+                                onTap: () {
+                                  setState(() {
+                                    storesController.text = suggestion;
+                                    _storeSuggestions = [];
+                                    _showSuggestionsStore = false;
+                                  });
+                                  quantityFocusNode.requestFocus();
+                                },
+                              );
+                            },
+                          ),
+                        ),
+
                       CheckboxListTile(
                         contentPadding: EdgeInsets.zero,
                         title: Text("Mark as Essential"),

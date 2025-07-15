@@ -1,3 +1,4 @@
+// IMPORTS
 import 'package:basket/components/shop_tile.dart';
 import 'package:basket/components/welcome_header.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -14,12 +15,15 @@ class StorePage extends StatefulWidget {
 }
 
 class _StorePageState extends State<StorePage> {
+  // VARIABLES
   late Future<List<String>> _storeNamesFuture;
-  Map<String, List<dynamic>> itemsMap = {};
   final User? currentUser = FirebaseAuth.instance.currentUser;
+  Map<String, List<dynamic>> itemsMap = {};
   Future<String>? _firstNameFuture;
 
+  // HELPER METHODS
   Future<List<String>> _getUserStores() async {
+    // load doc and get the data
     final doc = await FirebaseFirestore.instance
         .collection("Users")
         .doc(currentUser?.email)
@@ -48,6 +52,79 @@ class _StorePageState extends State<StorePage> {
     return data?['first_name'] ?? "";
   }
 
+  void handleNewStore(BuildContext use_build_context_synchronously) async {
+    // Variables
+    final TextEditingController newStoreController = TextEditingController();
+    final navigator = Navigator.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+
+    // Show alert with input for new store
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text("New Store"),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text(
+              "To add a new store, type in the name of the store below and click \"Add\"",
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: newStoreController,
+              decoration: const InputDecoration(
+                labelText: "New Store",
+                border: OutlineInputBorder(),
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => navigator.pop(false),
+            child: const Text("Cancel"),
+          ),
+          TextButton(
+            onPressed: () {
+              final input = newStoreController.text.trim();
+              if (input.isNotEmpty) {
+                navigator.pop(true);
+              } else {
+                messenger.showSnackBar(
+                  const SnackBar(content: Text("Something went wrong...")),
+                );
+              }
+            },
+            child: const Text("Add"),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true) return;
+
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        messenger.showSnackBar(const SnackBar(content: Text("No user found.")));
+        return;
+      }
+
+      final doc = await FirebaseFirestore.instance
+          .collection("Users")
+          .doc(currentUser?.email)
+          .get();
+
+      final data = doc.data();
+
+      data?['items'].addEntries({newStoreController.text: []});
+    } catch (e) {
+      messenger.showSnackBar(
+        SnackBar(content: Text("Something went wrong: $e")),
+      );
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -58,6 +135,10 @@ class _StorePageState extends State<StorePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => handleNewStore,
+        child: Icon(Icons.add_rounded),
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -95,10 +176,13 @@ class _StorePageState extends State<StorePage> {
                       itemBuilder: (context, index) {
                         final storeName = stores[index];
                         final items = itemsMap[storeName] ?? [];
-                        return ShopTile(
-                          itemName: storeName,
-                          itemQuantity: items.length,
-                          onTap: () => widget.onEnterStore(storeName),
+                        return Container(
+                          margin: EdgeInsets.only(bottom: 12),
+                          child: ShopTile(
+                            itemName: storeName,
+                            itemQuantity: items.length,
+                            onTap: () => widget.onEnterStore(storeName),
+                          ),
                         );
                       },
                     );

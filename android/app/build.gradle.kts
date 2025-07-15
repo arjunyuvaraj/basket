@@ -20,20 +20,20 @@ android {
     compileSdk = 35
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11.toString()
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
     defaultConfig {
         applicationId = "com.arjunyuvaraj.basket"
         minSdk = 23
         targetSdk = 35
-        versionCode = 3
-        versionName = "1.1"
+        versionCode = 6
+        versionName = "v1.3"
     }
 
     signingConfigs {

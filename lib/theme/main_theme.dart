@@ -29,4 +29,5 @@ final ThemeData mainTheme = ThemeData(
   ),
   dividerColor: Colors.transparent,
   useMaterial3: true,
+  iconTheme: IconThemeData(size: 32),
 );

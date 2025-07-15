@@ -40,10 +40,12 @@ class _SearchPageState extends State<SearchPage> {
     List<Map<String, dynamic>> allItems = [];
 
     itemsMap.forEach((store, items) {
-      final itemList = List<Map<String, dynamic>>.from(items);
-      for (var item in itemList) {
-        item['store'] = store;
-        allItems.add(item);
+      if (store != "order") {
+        final itemList = List<Map<String, dynamic>>.from(items);
+        for (var item in itemList) {
+          item['store'] = store;
+          allItems.add(item);
+        }
       }
     });
 
